@@ -1,29 +1,33 @@
+from database import Database  # Import from your teammate's file
+
 class TodoList:
     def __init__(self):
-        self.tasks = []  # A list to hold all tasks
-        self.next_id = 1  # To give each task a unique ID
+        self.db = Database()  # Use the database for storage
 
     def add_task(self, title, description, status="Todo"):
-        # Create a new task dictionary
-        task = {
-            "id": self.next_id,
-            "title": title,
-            "description": description,
-            "status": status
-        }
-        # Add it to the list
-        self.tasks.append(task)
-        # Increase the ID for the next task
-        self.next_id += 1
+        # Map your status to DB format (lowercase, no space)
+        db_status = status.lower().replace(" ", "")
+        # Call DB add_task
+        new_id = self.db.add_task(title, db_status, description)
+        return new_id  # Return the new ID for convenience
 
     def remove_task(self, task_id):
-        # Loop through tasks to find the one with matching ID
-        for task in self.tasks:
-            if task["id"] == task_id:
-                self.tasks.remove(task)
-                return True  # Found and removed
-        return False  # Not found
+        # Call DB remove_task
+        return self.db.remove_task(task_id)
 
     def get_all_tasks(self):
-        # Return a copy of the tasks list
-        return self.tasks[:]
+        # Call DB get_all_tasks
+        tasks = self.db.get_all_tasks()
+        # Map DB status back to your format (optional, for consistency)
+        for task in tasks:
+            if task["status"] == "todo":
+                task["status"] = "Todo"
+            elif task["status"] == "inprogress":
+                task["status"] = "In progress"
+            elif task["status"] == "done":
+                task["status"] = "Done"
+        return tasks
+
+    def close(self):
+        # Close the DB when done
+        self.db.close()
