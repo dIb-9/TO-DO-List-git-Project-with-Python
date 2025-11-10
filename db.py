@@ -76,7 +76,7 @@ class Database:
         
         self.conn.close()    
         
-   """    
+     
 if __name__ == '__main__':
     db = Database()
     try:
@@ -87,4 +87,4 @@ if __name__ == '__main__':
         removed = db.remove_task(new_id)
         print(f"Removed: {removed}")
     finally:
-        db.close()        """
+        db.close()       
