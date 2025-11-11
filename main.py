@@ -80,7 +80,6 @@ def get_task_status():
         cursor.execute("SELECT id, title, status, description FROM tasks WHERE title = ?", (task_name,))
     else:
         print("Invalid choice. Please select 1 or 2.")
-        conn.close()
         return
 
     row = cursor.fetchone()
